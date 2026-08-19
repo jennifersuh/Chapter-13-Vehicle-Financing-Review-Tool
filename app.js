@@ -55,6 +55,7 @@ function collectData() {
     monthlyPayment: numberValue("monthlyPayment"),
     termMonths: numberValue("termMonths"),
     cashDown: numberValue("cashDown"),
+    cashDownEntered: textValue("cashDown") !== "",
     totalPayments: numberValue("totalPayments"),
     financeCharge: numberValue("financeCharge"),
     statedRate: numberValue("statedRate"),
@@ -77,14 +78,21 @@ function missingRequiredFields(data) {
   if (!(data.monthlyPayment > 0)) missing.push("Monthly payment");
   if (!(data.termMonths > 0)) missing.push("Loan term / number of payments");
   if (!(data.apr > 0) && !(data.statedRate > 0)) missing.push("APR or interest rate");
-  if (!data.creditTier) missing.push("VantageScore 4.0 credit tier or unavailable");
+  if (!data.creditTier) missing.push("Experian Q1 2026 VantageScore 4.0 credit tier or unavailable");
   return missing;
 }
 
+function renderPairs(containerId, rows) {
+  const container = $(containerId);
+  container.innerHTML = rows.map(([label, value]) =>
+    `<div class="review-row"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></div>`
+  ).join("");
+}
+
 function render(output) {
-  $("metricLtv").textContent = output.metrics.ltv;
-  $("metricAboveValue").textContent = output.metrics.amountAboveValue;
-  $("metricCreditTier").textContent = output.metrics.creditTier;
+  renderPairs("vehicleSummary", output.vehicleSummary);
+  renderPairs("rateSummary", output.rateSummary);
+  $("rateNote").textContent = output.rateNote || "";
 
   const resultsBody = $("resultsBody");
   resultsBody.innerHTML = output.results.map(([section, item, result]) =>
@@ -92,18 +100,16 @@ function render(output) {
   ).join("");
 
   const empty = $("flagsEmpty");
-  const wrap = $("flagsTableWrap");
-  const body = $("flagsBody");
-
+  const list = $("flagsList");
   if (!output.reviewItems.length) {
     empty.classList.remove("hidden");
-    wrap.classList.add("hidden");
-    body.innerHTML = "";
+    list.classList.add("hidden");
+    list.innerHTML = "";
   } else {
     empty.classList.add("hidden");
-    wrap.classList.remove("hidden");
-    body.innerHTML = output.reviewItems.map(entry =>
-      `<tr><td>${escapeHtml(entry.area)}</td><td>${escapeHtml(entry.item)}</td><td>${escapeHtml(entry.basis)}</td></tr>`
+    list.classList.remove("hidden");
+    list.innerHTML = output.reviewItems.map(entry =>
+      `<li><strong>${escapeHtml(entry.label)}</strong> ${escapeHtml(entry.text)}</li>`
     ).join("");
   }
 
