@@ -32,64 +32,60 @@
         <label>Year *<input id="year" type="number" min="1980" max="2035" placeholder="2022"></label>
         <label>Make *<input id="make" type="text" placeholder="Honda"></label>
         <label>Model *<input id="model" type="text" placeholder="CR-V"></label>
-        <label>Mileage (optional)<input id="mileage" type="number" min="0" step="1000" placeholder="If known"></label>
-        <label>Condition (optional)<select id="condition"><option value="">Not entered / unknown</option><option>Excellent</option><option>Very Good</option><option>Good</option><option>Fair</option><option>Poor / significant defects</option></select></label>
-        <label>VIN (optional)<input id="vin" type="text" maxlength="17" placeholder="If known"></label>
+        <label>Mileage (optional; odometer mileage)<input id="mileage" type="number" min="0" step="1000" placeholder="If known"></label>
+        <label>Condition (optional; use the valuation source's closest category)<select id="condition"><option value="">Not entered / unknown</option><option>Excellent</option><option>Very Good</option><option>Good</option><option>Fair</option><option>Poor / significant defects</option></select></label>
+        <label>VIN (optional; 17-digit vehicle identification number)<input id="vin" type="text" maxlength="17" placeholder="If known"></label>
       </div>
 
       <div class="subsection">
         <h3>Price and value</h3>
         <div class="grid grid-3">
-          <label>Dealer cash price *<div class="money-input"><span>$</span><input id="cashPrice" type="number" min="0" step="100" placeholder="0"></div></label>
-          <label>Vehicle value (optional)<div class="money-input"><span>$</span><input id="supportedValue" type="number" min="0" step="100" placeholder="If available"></div></label>
-          <label>Value source (optional)<input id="valueSource" type="text" placeholder="KBB, J.D. Power, comparable listing"></label>
+          <label>Dealer cash price * (cash price shown for the vehicle)<div class="money-input"><span>$</span><input id="cashPrice" type="number" min="0" step="100" placeholder="0"></div></label>
+          <label>Supported vehicle value (optional; single value used for LTV)<div class="money-input"><span>$</span><input id="supportedValue" type="number" min="0" step="100" placeholder="If available"></div></label>
+          <label>Value source (optional; e.g., KBB, J.D. Power, local comparable)<input id="valueSource" type="text" placeholder="Source used for the value"></label>
         </div>
         <div class="toolbar">
           <a class="button secondary" href="https://www.kbb.com/car-values/" target="_blank" rel="noopener noreferrer">Open Kelley Blue Book</a>
-          <span class="helper">Vehicle value is not required. LTV is calculated only when a supported value is entered.</span>
+          <span class="helper">LTV and price-to-value calculations run only when a supported vehicle value is entered.</span>
         </div>
       </div>
 
       <div class="subsection">
         <h3>Financed extras (optional)</h3>
         <div class="grid grid-3">
-          <label>Financed taxes and fees<div class="money-input"><span>$</span><input id="taxesFees" type="number" min="0" step="50" placeholder="Optional"></div></label>
-          <label>Financed GAP<div class="money-input"><span>$</span><input id="gap" type="number" min="0" step="50" placeholder="Optional"></div></label>
-          <label>Warranty / service contract<div class="money-input"><span>$</span><input id="warranty" type="number" min="0" step="50" placeholder="Optional"></div></label>
-          <label>Other financed add-ons<div class="money-input"><span>$</span><input id="otherAddons" type="number" min="0" step="50" placeholder="Optional"></div></label>
-          <label>Other financed charges<div class="money-input"><span>$</span><input id="otherFinanced" type="number" min="0" step="50" placeholder="Optional"></div></label>
-          <label>Rebates / other credits<div class="money-input"><span>$</span><input id="rebatesCredits" type="number" min="0" step="50" placeholder="Optional"></div></label>
+          <label>Financed taxes and fees (amount included in financing)<div class="money-input"><span>$</span><input id="taxesFees" type="number" min="0" step="50" placeholder="Optional"></div></label>
+          <label>Financed GAP (amount financed for GAP coverage)<div class="money-input"><span>$</span><input id="gap" type="number" min="0" step="50" placeholder="Optional"></div></label>
+          <label>Warranty / service contract (financed amount)<div class="money-input"><span>$</span><input id="warranty" type="number" min="0" step="50" placeholder="Optional"></div></label>
+          <label>Other financed add-ons (optional products)<div class="money-input"><span>$</span><input id="otherAddons" type="number" min="0" step="50" placeholder="Optional"></div></label>
+          <label>Other financed charges (other separately identified financed amounts)<div class="money-input"><span>$</span><input id="otherFinanced" type="number" min="0" step="50" placeholder="Optional"></div></label>
+          <label>Rebates / other credits (credits reducing the transaction amount)<div class="money-input"><span>$</span><input id="rebatesCredits" type="number" min="0" step="50" placeholder="Optional"></div></label>
         </div>
       </div>
     </section>
 
     <section class="card">
-      <div class="section-title"><span class="step">2</span><div><h2>Proposed financing</h2><p>Enter APR when available. If APR is not yet available, enter the stated interest rate instead.</p></div></div>
+      <div class="section-title"><span class="step">2</span><div><h2>Proposed financing</h2><p>Enter the terms shown in the proposed or final financing documents. APR and the stated interest rate remain separate.</p></div></div>
       <div class="grid grid-3">
         <label>APR<div class="percent-input"><input id="apr" type="number" min="0" max="100" step="0.001" placeholder="If available"><span>%</span></div></label>
-        <label>Amount financed *<div class="money-input"><span>$</span><input id="amountFinanced" type="number" min="0" step="100" placeholder="0"></div></label>
-        <label>Monthly payment *<div class="money-input"><span>$</span><input id="monthlyPayment" type="number" min="0" step="10" placeholder="0"></div></label>
+        <label>Amount financed * (Regulation Z amount financed, not total of payments)<div class="money-input"><span>$</span><input id="amountFinanced" type="number" min="0" step="100" placeholder="0"></div></label>
+        <label>Monthly payment * (scheduled loan payment)<div class="money-input"><span>$</span><input id="monthlyPayment" type="number" min="0" step="10" placeholder="0"></div></label>
 
         <label>Interest rate<div class="percent-input"><input id="statedRate" type="number" min="0" max="100" step="0.001" placeholder="If separately stated"><span>%</span></div></label>
-        <label>Loan term / number of payments *<div class="suffix-input"><input id="termMonths" type="number" min="1" max="120" step="1" placeholder="60"><span>months</span></div></label>
-        <label>Cash down payment (optional)<div class="money-input"><span>$</span><input id="cashDown" type="number" min="0" step="100" placeholder="Optional"></div></label>
+        <label>Loan term / number of payments * (e.g., 60 monthly payments)<div class="suffix-input"><input id="termMonths" type="number" min="1" max="120" step="1" placeholder="60"><span>months</span></div></label>
+        <label>Cash down payment (optional; cash paid at purchase)<div class="money-input"><span>$</span><input id="cashDown" type="number" min="0" step="100" placeholder="Optional"></div></label>
 
-        <label>Total of payments (optional)<div class="money-input"><span>$</span><input id="totalPayments" type="number" min="0" step="100" placeholder="Optional"></div></label>
-        <label>Finance charge (optional; total dollar cost of credit)<div class="money-input"><span>$</span><input id="financeCharge" type="number" min="0" step="100" placeholder="If disclosed"></div></label>
-        <label>Lender / dealer (optional; creditor or financing source)<input id="lender" type="text" placeholder="If known"></label>
+        <label>Total of payments (optional; disclosed sum of scheduled payments)<div class="money-input"><span>$</span><input id="totalPayments" type="number" min="0" step="100" placeholder="Optional"></div></label>
+        <label>Finance charge (optional; disclosed dollar cost of credit)<div class="money-input"><span>$</span><input id="financeCharge" type="number" min="0" step="100" placeholder="If disclosed"></div></label>
+        <label>Lender / creditor (optional; actual financing source, not the seller unless the seller finances in-house)<input id="lender" type="text" placeholder="If known"></label>
       </div>
-      <p class="helper">At least APR or the stated interest rate must be entered. The tool keeps them separate and does not substitute one for the other.</p>
+      <p class="helper">At least APR or the stated interest rate must be entered. APR benchmark comparisons run only when APR is entered.</p>
 
       <div class="field-group financing-channel">
-        <span class="field-label">Financing channel (optional; how the financing was obtained)</span>
+        <span class="field-label">How financing was obtained</span>
         <div class="radio-list">
-          <label><input type="radio" name="financingChannel" value="Bank"> Bank</label>
-          <label><input type="radio" name="financingChannel" value="Credit union"> Credit union</label>
-          <label><input type="radio" name="financingChannel" value="Captive/manufacturer finance company"> Captive/manufacturer finance company</label>
-          <label><input type="radio" name="financingChannel" value="Nonbank auto finance company"> Nonbank auto finance company</label>
-          <label><input type="radio" name="financingChannel" value="Dealer-arranged, lender identified"> Dealer-arranged, lender identified</label>
-          <label><input type="radio" name="financingChannel" value="BHPH / dealer financing in-house"> BHPH / dealer financing in-house</label>
-          <label><input type="radio" name="financingChannel" value="Online lender"> Online lender</label>
+          <label><input type="radio" name="financingChannel" value="Direct from lender"> Direct from bank / credit union / finance company</label>
+          <label><input type="radio" name="financingChannel" value="Dealer-arranged through outside lender"> Dealer-arranged through outside lender</label>
+          <label><input type="radio" name="financingChannel" value="Dealer financing in-house / BHPH"> Dealer financing in-house / BHPH</label>
           <label><input type="radio" name="financingChannel" value="Unknown" checked> Unknown</label>
         </div>
       </div>
@@ -97,7 +93,7 @@
       <div class="subsection">
         <h3>Credit context</h3>
         <div class="grid grid-2">
-          <label>VantageScore 4.0 credit tier *
+          <label>Experian Q1 2026 VantageScore 4.0 credit tier *
             <select id="creditTier">
               <option value="">Select tier or unavailable</option>
               <option>Super prime (781–850)</option>
@@ -108,39 +104,54 @@
               <option>Unavailable / different score model</option>
             </select>
           </label>
-          <label>Credit score (optional; enter only if the available score uses VantageScore 4.0)<input id="creditScore" type="number" min="300" max="850" step="1" placeholder="Optional"></label>
+          <label>Credit score (optional; enter only when the available score is VantageScore 4.0)<input id="creditScore" type="number" min="300" max="850" step="1" placeholder="Optional"></label>
         </div>
-        <p class="helper">Tier ranges shown are the Q1 2026 Experian auto-finance ranges using VantageScore 4.0. If the available score uses another model, select “Unavailable / different score model” rather than mapping it directly.</p>
+        <p class="helper">The tier ranges match the Q1 2026 Experian auto-finance categories used in the memo. A different score model should not be mapped directly into these ranges.</p>
       </div>
     </section>
 
     <section class="card result-card">
-      <div class="section-title"><span class="step">3</span><div><h2>Review</h2><p>Run the review after completing all required fields.</p></div></div>
+      <div class="section-title"><span class="step">3</span><div><h2>Calculated Review</h2><p>Run the review after completing all required fields.</p></div></div>
       <div class="toolbar">
         <button class="button" id="runButton" type="button">Run review</button>
         <button class="button secondary" id="clearButton" type="button">Clear all</button>
       </div>
       <div id="reviewPrompt" class="empty-state">Complete the required fields above, then select Run review.</div>
       <div id="reviewOutput" class="hidden">
-        <div class="metric-grid">
-          <div class="metric"><span>LTV</span><strong id="metricLtv">—</strong></div>
-          <div class="metric"><span>Amount above / below vehicle value</span><strong id="metricAboveValue">—</strong></div>
-          <div class="metric"><span>Credit tier</span><strong id="metricCreditTier">—</strong></div>
+        <div class="review-section">
+          <h3>Vehicle / financing</h3>
+          <div class="review-list" id="vehicleSummary"></div>
         </div>
-        <h3>Items for Review</h3>
-        <div id="flagsEmpty" class="empty-state">No review items generated from the information entered.</div>
-        <div id="flagsTableWrap" class="table-wrap hidden"><table><thead><tr><th>Area</th><th>Review item</th><th>Basis</th></tr></thead><tbody id="flagsBody"></tbody></table></div>
-        <p class="footnote-note">An item appears here only when the entered figures meet the arithmetic or record condition shown in the Basis column. The tool does not determine whether the transaction should be approved or whether additional shopping is required.</p>
-        <h3>Results</h3>
-        <div class="table-wrap"><table><thead><tr><th>Section</th><th>Item</th><th>Result</th></tr></thead><tbody id="resultsBody"></tbody></table></div>
+
+        <div class="review-section">
+          <h3>Rate comparison</h3>
+          <div class="review-list" id="rateSummary"></div>
+          <p class="footnote-note" id="rateNote"></p>
+        </div>
+
+        <div class="review-section">
+          <h3>Review flags</h3>
+          <div id="flagsEmpty" class="empty-state">No review flags generated from the information entered.</div>
+          <ul id="flagsList" class="review-flags hidden"></ul>
+          <p class="footnote-note">A review flag identifies a defined arithmetic comparison or record inconsistency. It is not a conclusion that the transaction is unreasonable or should be denied.</p>
+        </div>
+
+        <details class="result-details">
+          <summary>Entered details</summary>
+          <div class="table-wrap"><table><thead><tr><th>Section</th><th>Item</th><th>Result</th></tr></thead><tbody id="resultsBody"></tbody></table></div>
+        </details>
+
         <div class="toolbar bottom-actions"><button class="button" id="printButton" type="button">Print review</button></div>
       </div>
     </section>
 
     <section class="definitions">
       <details><summary>Calculation definitions</summary><div class="definition-body">
-        <p><strong>LTV</strong> = amount financed ÷ entered vehicle value × 100. LTV is shown only when a vehicle value is entered.</p>
-        <p><strong>Finance charge</strong> is entered from the credit disclosure when available; the tool does not calculate it.</p>
+        <p><strong>Price vs. value</strong> = dealer cash price − entered supported vehicle value, with the percentage difference measured against the supported value.</p>
+        <p><strong>LTV</strong> = amount financed ÷ entered supported vehicle value × 100.</p>
+        <p><strong>Down-payment share</strong> = cash down payment ÷ dealer cash price × 100.</p>
+        <p><strong>Financed add-ons</strong> = financed GAP + warranty/service contract + other financed add-ons. Taxes, fees, and other financed charges are displayed separately and are not included in this add-on subtotal.</p>
+        <p><strong>APR comparison</strong> uses the Q1 2026 Experian average used-vehicle APR for the selected VantageScore 4.0 tier. It is not calculated for a new vehicle, a different/unknown score model, or when APR is not entered.</p>
       </div></details>
     </section>
   </main>
