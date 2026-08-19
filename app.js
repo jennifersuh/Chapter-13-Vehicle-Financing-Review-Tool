@@ -61,20 +61,24 @@ function collectData() {
     statedRate: numberValue("statedRate"),
     lender: textValue("lender"),
     financingChannel: radioValue("financingChannel"),
-    equalPayments: $("equalPayments").checked,
+
+    creditScore: numberValue("creditScore"),
+    scoreModel: textValue("scoreModel"),
+    grossIncome: numberValue("grossIncome"),
+    benchmarkApr: numberValue("benchmarkApr"),
+    benchmarkLabel: textValue("benchmarkLabel"),
+    financingAttempts: textValue("financingAttempts"),
 
     planPayment: numberValue("planPayment"),
     currentNetIncome: numberValue("currentNetIncome"),
-    changeNetIncome: numberValue("changeNetIncome"),
-    grossIncome: numberValue("grossIncome"),
-    monthlyExpenses: numberValue("monthlyExpenses"),
+    replacedVehiclePayment: numberValue("replacedVehiclePayment"),
+    currentInsurance: numberValue("currentInsurance"),
+    projectedInsurance: numberValue("projectedInsurance"),
+    otherVehicleCostChange: numberValue("otherVehicleCostChange"),
+    monthlyIncomeChange: numberValue("monthlyIncomeChange"),
+    scheduleDate: textValue("scheduleDate"),
     planStatus: textValue("planStatus"),
-    deficitExplanation: textValue("deficitExplanation"),
-
-    creditScore: numberValue("creditScore"),
-    benchmarkApr: numberValue("benchmarkApr"),
-    benchmarkLabel: textValue("benchmarkLabel"),
-    financingAttempts: textValue("financingAttempts")
+    deficitExplanation: textValue("deficitExplanation")
   };
 }
 
@@ -85,16 +89,24 @@ function missingRequiredFields(data) {
   if (!data.make) missing.push("Make");
   if (!data.model) missing.push("Model");
   if (!(data.cashPrice > 0)) missing.push("Dealer cash price");
-  if (!(data.apr > 0)) missing.push("APR");
   if (!(data.amountFinanced > 0)) missing.push("Amount financed");
   if (!(data.monthlyPayment > 0)) missing.push("Monthly payment");
   if (!(data.termMonths > 0)) missing.push("Loan term / number of payments");
-  if (!(data.planPayment >= 0) || textValue("planPayment") === "") missing.push("Current monthly plan payment");
-  if (textValue("currentNetIncome") === "") missing.push("Current monthly net income from Schedules I/J");
-  if (textValue("changeNetIncome") === "") missing.push("Change in net monthly income from proposed transaction");
+  if (!(data.apr > 0) && !(data.statedRate > 0)) missing.push("APR or stated interest rate");
+  if (textValue("planPayment") === "") missing.push("Current monthly plan payment");
+  if (textValue("currentNetIncome") === "") missing.push("Current Schedule J monthly net income");
+  if (textValue("replacedVehiclePayment") === "") missing.push("Vehicle payment being replaced");
 
-  const projectedNetIncome = data.currentNetIncome + data.changeNetIncome;
-  const projectedRemaining = projectedNetIncome - data.planPayment;
+  const insuranceOneOnly = (textValue("currentInsurance") === "") !== (textValue("projectedInsurance") === "");
+  if (insuranceOneOnly) missing.push("Both current and projected vehicle insurance, or neither");
+
+  const vehiclePaymentChange = data.monthlyPayment - data.replacedVehiclePayment;
+  const insuranceChange = (textValue("currentInsurance") !== "" && textValue("projectedInsurance") !== "")
+    ? data.projectedInsurance - data.currentInsurance
+    : 0;
+  const netVehicleCostChange = vehiclePaymentChange + insuranceChange + data.otherVehicleCostChange;
+  const projectedNet = data.currentNetIncome + data.monthlyIncomeChange - netVehicleCostChange;
+  const projectedRemaining = projectedNet - data.planPayment;
   if (projectedRemaining < 0 && !data.deficitExplanation) {
     missing.push("Explanation for projected budget deficit");
   }
@@ -104,6 +116,8 @@ function missingRequiredFields(data) {
 function render(output) {
   $("metricLtv").textContent = output.metrics.ltv;
   $("metricAboveValue").textContent = output.metrics.amountAboveValue;
+  $("metricPti").textContent = output.metrics.pti;
+  $("metricProjectedNet").textContent = output.metrics.projectedNetIncome;
   $("metricBudgetCushion").textContent = output.metrics.budgetCushion;
   $("metricAprDiff").textContent = output.metrics.aprDifference;
 
