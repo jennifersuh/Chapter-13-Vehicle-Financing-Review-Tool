@@ -44,8 +44,6 @@ def evaluate(data: dict[str, Any]) -> dict[str, Any]:
 
     cash_price = _num(data.get("cashPrice"))
     supported_value = _num(data.get("supportedValue"))
-    market_low = _num(data.get("marketLow"))
-    market_high = _num(data.get("marketHigh"))
 
     apr = _num(data.get("apr"))
     amount_financed = _num(data.get("amountFinanced"))
@@ -78,27 +76,6 @@ def evaluate(data: dict[str, Any]) -> dict[str, Any]:
     def add_review(area: str, item: str, basis: str) -> None:
         review_items.append({"area": area, "item": item, "basis": basis})
 
-    price_range_result = "—"
-    if market_low > 0 and market_high > 0 and market_high >= market_low and cash_price > 0:
-        if cash_price > market_high:
-            difference = cash_price - market_high
-            price_range_result = f"{_money(difference)} above entered range high"
-            add_review(
-                "Vehicle price",
-                f"Cash price is {_money(difference)} above the entered market-range high.",
-                "Dealer cash price compared with the entered market range.",
-            )
-        elif cash_price < market_low:
-            difference = market_low - cash_price
-            price_range_result = f"{_money(difference)} below entered range low"
-            add_review(
-                "Vehicle price",
-                f"Cash price is {_money(difference)} below the entered market-range low.",
-                "Dealer cash price compared with the entered market range.",
-            )
-        else:
-            price_range_result = "Within entered market range"
-
     ltv = None
     amount_above_value = None
     if supported_value > 0 and amount_financed > 0:
@@ -107,9 +84,9 @@ def evaluate(data: dict[str, Any]) -> dict[str, Any]:
         if ltv > 100:
             add_review(
                 "LTV",
-                f"Amount financed exceeds supported vehicle value by {_money(amount_above_value)}; "
+                f"Amount financed exceeds the entered vehicle value by {_money(amount_above_value)}; "
                 f"LTV is {_percent(ltv)}.",
-                "Amount financed ÷ supported vehicle value.",
+                "Amount financed ÷ entered vehicle value.",
             )
 
     trade_equity = None
@@ -174,24 +151,17 @@ def evaluate(data: dict[str, Any]) -> dict[str, Any]:
         str(data.get("year") or "").strip(),
         str(data.get("make") or "").strip(),
         str(data.get("model") or "").strip(),
-        str(data.get("trim") or "").strip(),
     ]
     vehicle_name = " ".join(part for part in vehicle_parts if part) or "—"
-
-    market_range = (
-        f"{_money(market_low)} – {_money(market_high)}"
-        if market_low > 0 and market_high > 0
-        else "—"
-    )
 
     results = [
         ["Vehicle", "Status", str(data.get("vehicleStatus") or "—")],
         ["Vehicle", "Vehicle", vehicle_name],
         ["Vehicle", "Mileage", f"{int(_num(data.get('mileage'))):,}" if _num(data.get("mileage")) > 0 else "—"],
+        ["Vehicle", "Condition", str(data.get("condition") or "—")],
         ["Vehicle", "Dealer cash price", _money(cash_price) if cash_price > 0 else "—"],
-        ["Vehicle", "Supported vehicle value", _money(supported_value) if supported_value > 0 else "—"],
-        ["Vehicle", "Entered market range", market_range],
-        ["Vehicle", "Price vs. entered range", price_range_result],
+        ["Vehicle", "Entered vehicle value", _money(supported_value) if supported_value > 0 else "—"],
+        ["Vehicle", "Value source", str(data.get("valueSource") or "—")],
         ["Financing", "Financing channel", str(data.get("financingChannel") or "Unknown")],
         ["Financing", "APR", f"{apr:.3f}%" if apr > 0 else "—"],
         ["Financing", "Amount financed", _money(amount_financed) if amount_financed > 0 else "—"],
