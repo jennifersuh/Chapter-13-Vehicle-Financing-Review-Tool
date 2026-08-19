@@ -61,6 +61,7 @@ def evaluate(data: dict[str, Any]) -> dict[str, Any]:
     vehicle_status = str(data.get("vehicleStatus") or "—")
     cash_price = _num(data.get("cashPrice"))
     supported_value = _num(data.get("supportedValue"))
+    value_source = str(data.get("valueSource") or "—")
 
     taxes_fees = _num(data.get("taxesFees"))
     gap = _num(data.get("gap"))
@@ -87,7 +88,6 @@ def evaluate(data: dict[str, Any]) -> dict[str, Any]:
     def add_review(label: str, text: str) -> None:
         review_items.append({"label": label, "text": text})
 
-    # Vehicle price and value calculations.
     price_difference = None
     price_difference_pct = None
     if supported_value > 0 and cash_price > 0:
@@ -123,7 +123,13 @@ def evaluate(data: dict[str, Any]) -> dict[str, Any]:
         else None
     )
 
-    # Used-vehicle APR comparison for the selected VantageScore 4.0 tier.
+    total_financed_extras = taxes_fees + gap + warranty + other_addons + other_financed
+    total_financed_extras_share = (
+        total_financed_extras / amount_financed * 100
+        if total_financed_extras > 0 and amount_financed > 0
+        else None
+    )
+
     benchmark_apr = None
     apr_difference = None
     tier_info = TIER_DATA.get(credit_tier)
@@ -138,7 +144,6 @@ def evaluate(data: dict[str, Any]) -> dict[str, Any]:
                 f"used-auto average for the selected VantageScore 4.0 tier.",
             )
 
-    # Record consistency check when an actual VantageScore 4.0 score is entered.
     if credit_score > 0 and tier_info:
         low = int(tier_info["low"])
         high = int(tier_info["high"])
@@ -182,15 +187,31 @@ def evaluate(data: dict[str, Any]) -> dict[str, Any]:
     if financed_addons > 0 and financed_addons_share is not None:
         financed_addons_display = f"{_money(financed_addons)} ({_percent(financed_addons_share)} of amount financed)"
 
+    total_financed_extras_display = "—"
+    if total_financed_extras > 0 and total_financed_extras_share is not None:
+        total_financed_extras_display = (
+            f"{_money(total_financed_extras)} "
+            f"({_percent(total_financed_extras_share)} of amount financed)"
+        )
+
     vehicle_summary = [
         ["Supported vehicle value", _money(supported_value) if supported_value > 0 else "—"],
+        ["Value source", value_source],
         ["Cash price", _money(cash_price)],
         ["Price vs. value", price_vs_value],
         ["Amount financed", _money(amount_financed)],
         ["LTV", _percent(ltv)],
         ["Down payment", down_payment_display],
         ["Financed add-ons", financed_addons_display],
+        ["Total entered financed extras", total_financed_extras_display],
     ]
+
+    vehicle_note = (
+        "Financed add-ons show GAP, warranty/service contract, and other optional add-ons. "
+        "Total entered financed extras additionally includes financed taxes/fees and other separately identified "
+        "financed charges. These figures help show what portions of the amount financed are attributable to "
+        "items beyond the vehicle cash price; they are descriptive only."
+    )
 
     rate_summary = [
         ["Credit tier", credit_tier],
@@ -213,7 +234,7 @@ def evaluate(data: dict[str, Any]) -> dict[str, Any]:
         ["Vehicle", "Condition", str(data.get("condition") or "—")],
         ["Vehicle", "Dealer cash price", _money(cash_price)],
         ["Vehicle", "Supported vehicle value", _money(supported_value) if supported_value > 0 else "—"],
-        ["Vehicle", "Value source", str(data.get("valueSource") or "—")],
+        ["Vehicle", "Value source", value_source],
         ["Vehicle", "Price vs. value", price_vs_value],
 
         ["Financed extras", "Taxes and fees", _money(taxes_fees) if taxes_fees > 0 else "—"],
@@ -223,6 +244,7 @@ def evaluate(data: dict[str, Any]) -> dict[str, Any]:
         ["Financed extras", "Other financed charges", _money(other_financed) if other_financed > 0 else "—"],
         ["Financed extras", "Rebates / other credits", _money(rebates_credits) if rebates_credits > 0 else "—"],
         ["Financed extras", "Financed add-ons subtotal", financed_addons_display],
+        ["Financed extras", "Total entered financed extras", total_financed_extras_display],
 
         ["Financing", "How financing was obtained", str(data.get("financingChannel") or "Unknown")],
         ["Financing", "Lender / creditor", str(data.get("lender") or "—")],
@@ -246,6 +268,7 @@ def evaluate(data: dict[str, Any]) -> dict[str, Any]:
 
     return {
         "vehicleSummary": vehicle_summary,
+        "vehicleNote": vehicle_note,
         "rateSummary": rate_summary,
         "rateNote": rate_note,
         "reviewItems": review_items,
