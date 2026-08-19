@@ -26,30 +26,26 @@
     </section>
 
     <section class="card">
-      <div class="section-title"><span class="step">1</span><div><h2>Vehicle</h2><p>Enter the vehicle information and the value used for comparison.</p></div></div>
+      <div class="section-title"><span class="step">1</span><div><h2>Vehicle</h2><p>Enter the vehicle information available from the motion, proposed transaction, or hearing.</p></div></div>
       <div class="grid grid-3">
-        <label>Vehicle status<select id="vehicleStatus"><option>Used</option><option>New</option><option>Certified Pre-Owned (CPO)</option></select></label>
+        <label>Vehicle status<select id="vehicleStatus"><option>Used</option><option>New</option></select></label>
         <label>Year<input id="year" type="number" min="1980" max="2030" placeholder="2022"></label>
         <label>Make<input id="make" type="text" placeholder="Honda"></label>
         <label>Model<input id="model" type="text" placeholder="CR-V"></label>
-        <label>Trim / style<input id="trim" type="text" placeholder="EX AWD"></label>
-        <label>Mileage<input id="mileage" type="number" min="0" step="1000" placeholder="54000"></label>
-        <label>Condition<select id="condition"><option value="">Not entered</option><option>Excellent</option><option>Very Good</option><option>Good</option><option>Fair</option></select></label>
-        <label>ZIP code<input id="zipCode" type="text" maxlength="10" placeholder="60601"></label>
+        <label>Mileage (if known)<input id="mileage" type="number" min="0" step="1000" placeholder="Optional"></label>
+        <label>Condition (if known)<select id="condition"><option value="">Not entered / unknown</option><option>Excellent</option><option>Very Good</option><option>Good</option><option>Fair</option><option>Poor / significant defects</option></select></label>
         <label>VIN (optional)<input id="vin" type="text" maxlength="17" placeholder="Optional"></label>
       </div>
       <div class="toolbar">
         <a class="button secondary" href="https://www.kbb.com/car-values/" target="_blank" rel="noopener noreferrer">Open Kelley Blue Book</a>
-        <span class="helper">Look up the vehicle, then enter the supported value or range below.</span>
+        <span class="helper">Use a vehicle value only when a sufficiently supported figure is available. Leave it blank if no reliable value is available at the hearing.</span>
       </div>
       <div class="grid grid-3">
         <label>Dealer cash price<div class="money-input"><span>$</span><input id="cashPrice" type="number" min="0" step="100" placeholder="0"></div></label>
-        <label>Supported vehicle value used for LTV<div class="money-input"><span>$</span><input id="supportedValue" type="number" min="0" step="100" placeholder="0"></div></label>
-        <label>Value source / label<input id="valueSource" type="text" placeholder="KBB Fair Market Range"></label>
-        <label>Market range low (optional)<div class="money-input"><span>$</span><input id="marketLow" type="number" min="0" step="100" placeholder="0"></div></label>
-        <label>Market range high (optional)<div class="money-input"><span>$</span><input id="marketHigh" type="number" min="0" step="100" placeholder="0"></div></label>
-        <label>Valuation date<input id="valuationDate" type="date"></label>
+        <label>Vehicle value (optional)<div class="money-input"><span>$</span><input id="supportedValue" type="number" min="0" step="100" placeholder="Optional"></div></label>
+        <label>Value source (optional)<input id="valueSource" type="text" placeholder="KBB, J.D. Power, comparable listing"></label>
       </div>
+      <p class="helper">LTV is calculated only when a vehicle value is entered. The tool does not supply or infer a vehicle value.</p>
     </section>
 
     <section class="card">
@@ -134,7 +130,7 @@
 
     <section class="definitions">
       <details><summary>Calculation definitions</summary><div class="definition-body">
-        <p><strong>LTV</strong> = amount financed ÷ supported vehicle value × 100.</p>
+        <p><strong>LTV</strong> = amount financed ÷ entered vehicle value × 100. LTV is shown only when a vehicle value is entered.</p>
         <p><strong>Trade-in equity</strong> = trade-in allowance − existing lien payoff. A negative result is negative equity.</p>
         <p><strong>Amount-financed reconstruction</strong> = cash price + entered financed taxes/fees + GAP + warranty/service contract + other add-ons + other financed charges + negative equity − cash down payment − rebates/credits − positive trade-in equity.</p>
         <p><strong>Equal-payment scheduled sum</strong> = monthly payment × number of payments.</p>
