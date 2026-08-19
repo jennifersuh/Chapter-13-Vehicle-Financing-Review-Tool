@@ -53,12 +53,6 @@ def evaluate(data: dict[str, Any]) -> dict[str, Any]:
 
     credit_score = _num(data.get("creditScore"))
     credit_tier = str(data.get("creditTier") or "—")
-    gross_income = _num(data.get("grossIncome"))
-
-    plan_payment = _num(data.get("planPayment"))
-    current_net_income = _num(data.get("currentNetIncome"))
-    change_net_income = _num(data.get("changeNetIncome"))
-    projected_net_income = current_net_income + change_net_income
 
     review_items: list[dict[str, str]] = []
 
@@ -76,13 +70,6 @@ def evaluate(data: dict[str, Any]) -> dict[str, Any]:
                 f"Amount financed exceeds the entered vehicle value by {_money(amount_above_value)}; LTV is {_percent(ltv)}.",
                 "Amount financed ÷ entered vehicle value.",
             )
-
-    if projected_net_income < 0:
-        add_review(
-            "Plan feasibility",
-            f"Entered figures produce projected Schedule J net income of {_money(projected_net_income)}.",
-            "Current Schedule J monthly net income + entered change in net monthly income.",
-        )
 
     financed_addons = gap + warranty + other_addons
 
@@ -120,16 +107,8 @@ def evaluate(data: dict[str, Any]) -> dict[str, Any]:
         ["Financing", "Finance charge", _money(finance_charge) if finance_charge > 0 else "—"],
         ["Financing", "Total of payments", _money(total_payments) if total_payments > 0 else "—"],
 
-        ["Borrower and credit context", "VantageScore 4.0 credit tier", credit_tier],
-        ["Borrower and credit context", "Credit score", str(int(credit_score)) if credit_score > 0 else "—"],
-        ["Borrower and credit context", "Gross monthly income", _money(gross_income) if gross_income > 0 else "—"],
-
-        ["Plan and budget", "Current monthly plan payment", _money(plan_payment)],
-        ["Plan and budget", "Current Schedule J monthly net income", _money(current_net_income)],
-        ["Plan and budget", "Change in net monthly income", _money(change_net_income)],
-        ["Plan and budget", "Projected Schedule J net income", _money(projected_net_income)],
-        ["Plan and budget", "Plan payment status", str(data.get("planStatus") or "Unknown")],
-        ["Plan and budget", "Deficit explanation", str(data.get("deficitExplanation") or "—")],
+        ["Credit context", "VantageScore 4.0 credit tier", credit_tier],
+        ["Credit context", "Credit score", str(int(credit_score)) if credit_score > 0 else "—"],
 
         ["Calculation", "LTV", _percent(ltv)],
         ["Calculation", "Amount financed above / below vehicle value", _money(amount_above_value)],
@@ -139,7 +118,6 @@ def evaluate(data: dict[str, Any]) -> dict[str, Any]:
         "metrics": {
             "ltv": _percent(ltv),
             "amountAboveValue": _money(amount_above_value),
-            "projectedNetIncome": _money(projected_net_income),
             "creditTier": credit_tier,
         },
         "reviewItems": review_items,
