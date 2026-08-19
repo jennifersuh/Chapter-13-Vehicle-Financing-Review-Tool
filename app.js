@@ -91,6 +91,7 @@ function renderPairs(containerId, rows) {
 
 function render(output) {
   renderPairs("vehicleSummary", output.vehicleSummary);
+  $("vehicleNote").textContent = output.vehicleNote || "";
   renderPairs("rateSummary", output.rateSummary);
   $("rateNote").textContent = output.rateNote || "";
 
@@ -179,7 +180,7 @@ function clearAll() {
 
 document.addEventListener("DOMContentLoaded", async () => {
   $("runButton").addEventListener("click", runReview);
-  $("printButton").addEventListener("click", () => window.print());
+  $("printPageButton").addEventListener("click", () => window.print());
   $("clearButton").addEventListener("click", clearAll);
   await bootPython();
 });
