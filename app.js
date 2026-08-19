@@ -62,14 +62,7 @@ function collectData() {
     financingChannel: radioValue("financingChannel"),
 
     creditTier: textValue("creditTier"),
-    creditScore: numberValue("creditScore"),
-    grossIncome: numberValue("grossIncome"),
-
-    planPayment: numberValue("planPayment"),
-    currentNetIncome: numberValue("currentNetIncome"),
-    changeNetIncome: numberValue("changeNetIncome"),
-    planStatus: textValue("planStatus"),
-    deficitExplanation: textValue("deficitExplanation")
+    creditScore: numberValue("creditScore")
   };
 }
 
@@ -85,21 +78,12 @@ function missingRequiredFields(data) {
   if (!(data.termMonths > 0)) missing.push("Loan term / number of payments");
   if (!(data.apr > 0) && !(data.statedRate > 0)) missing.push("APR or interest rate");
   if (!data.creditTier) missing.push("VantageScore 4.0 credit tier or unavailable");
-  if (textValue("planPayment") === "") missing.push("Current monthly plan payment");
-  if (textValue("currentNetIncome") === "") missing.push("Current Schedule J monthly net income");
-  if (textValue("changeNetIncome") === "") missing.push("Change in net monthly income from proposed transaction");
-
-  const projectedNetIncome = data.currentNetIncome + data.changeNetIncome;
-  if (projectedNetIncome < 0 && !data.deficitExplanation) {
-    missing.push("Explanation for projected Schedule J deficit");
-  }
   return missing;
 }
 
 function render(output) {
   $("metricLtv").textContent = output.metrics.ltv;
   $("metricAboveValue").textContent = output.metrics.amountAboveValue;
-  $("metricProjectedNet").textContent = output.metrics.projectedNetIncome;
   $("metricCreditTier").textContent = output.metrics.creditTier;
 
   const resultsBody = $("resultsBody");
@@ -183,7 +167,6 @@ function clearAll() {
     el.selectedIndex = 0;
   });
   $("vehicleStatus").value = "Used";
-  $("planStatus").value = "Unknown";
   $("reviewOutput").classList.add("hidden");
   $("reviewPrompt").classList.remove("hidden");
 }
