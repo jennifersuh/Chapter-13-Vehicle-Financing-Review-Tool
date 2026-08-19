@@ -22,47 +22,65 @@
   <main class="wrap">
     <section class="notice">
       Entries are calculated in the browser and are not stored or transmitted by this page.
-      Refreshing or closing the page clears the entries.
+      Refreshing or closing the page clears the entries. Fields marked * are required to run the review.
     </section>
 
     <section class="card">
-      <div class="section-title"><span class="step">1</span><div><h2>Vehicle</h2><p>Enter the vehicle information available from the motion, proposed transaction, or hearing.</p></div></div>
+      <div class="section-title"><span class="step">1</span><div><h2>Vehicle and price</h2><p>Enter the vehicle and transaction information available from the motion, proposed transaction, or hearing.</p></div></div>
       <div class="grid grid-3">
-        <label>Vehicle status<select id="vehicleStatus"><option>Used</option><option>New</option></select></label>
-        <label>Year<input id="year" type="number" min="1980" max="2030" placeholder="2022"></label>
-        <label>Make<input id="make" type="text" placeholder="Honda"></label>
-        <label>Model<input id="model" type="text" placeholder="CR-V"></label>
-        <label>Mileage (if known)<input id="mileage" type="number" min="0" step="1000" placeholder="Optional"></label>
-        <label>Condition (if known)<select id="condition"><option value="">Not entered / unknown</option><option>Excellent</option><option>Very Good</option><option>Good</option><option>Fair</option><option>Poor / significant defects</option></select></label>
-        <label>VIN (optional)<input id="vin" type="text" maxlength="17" placeholder="Optional"></label>
+        <label>Vehicle status *<select id="vehicleStatus"><option>Used</option><option>New</option></select></label>
+        <label>Year *<input id="year" type="number" min="1980" max="2035" placeholder="2022"></label>
+        <label>Make *<input id="make" type="text" placeholder="Honda"></label>
+        <label>Model *<input id="model" type="text" placeholder="CR-V"></label>
+        <label>Mileage (optional)<input id="mileage" type="number" min="0" step="1000" placeholder="If known"></label>
+        <label>Condition (optional)<select id="condition"><option value="">Not entered / unknown</option><option>Excellent</option><option>Very Good</option><option>Good</option><option>Fair</option><option>Poor / significant defects</option></select></label>
+        <label>VIN (optional)<input id="vin" type="text" maxlength="17" placeholder="If known"></label>
       </div>
-      <div class="toolbar">
-        <a class="button secondary" href="https://www.kbb.com/car-values/" target="_blank" rel="noopener noreferrer">Open Kelley Blue Book</a>
-        <span class="helper">Use a vehicle value only when a sufficiently supported figure is available. Leave it blank if no reliable value is available at the hearing.</span>
+
+      <div class="subsection">
+        <h3>Price and value</h3>
+        <div class="grid grid-3">
+          <label>Dealer cash price *<div class="money-input"><span>$</span><input id="cashPrice" type="number" min="0" step="100" placeholder="0"></div></label>
+          <label>Vehicle value (optional)<div class="money-input"><span>$</span><input id="supportedValue" type="number" min="0" step="100" placeholder="If available"></div></label>
+          <label>Value source (optional)<input id="valueSource" type="text" placeholder="KBB, J.D. Power, comparable listing"></label>
+        </div>
+        <div class="toolbar">
+          <a class="button secondary" href="https://www.kbb.com/car-values/" target="_blank" rel="noopener noreferrer">Open Kelley Blue Book</a>
+          <span class="helper">Vehicle value is not required. LTV is calculated only when a sufficiently supported value is entered; the tool does not supply or infer one.</span>
+        </div>
       </div>
-      <div class="grid grid-3">
-        <label>Dealer cash price<div class="money-input"><span>$</span><input id="cashPrice" type="number" min="0" step="100" placeholder="0"></div></label>
-        <label>Vehicle value (optional)<div class="money-input"><span>$</span><input id="supportedValue" type="number" min="0" step="100" placeholder="Optional"></div></label>
-        <label>Value source (optional)<input id="valueSource" type="text" placeholder="KBB, J.D. Power, comparable listing"></label>
+
+      <div class="subsection">
+        <h3>Financed extras (optional)</h3>
+        <p class="helper">Enter these only when they are shown in the transaction documents or otherwise available in the record.</p>
+        <div class="grid grid-3">
+          <label>Financed taxes and fees<div class="money-input"><span>$</span><input id="taxesFees" type="number" min="0" step="50" placeholder="Optional"></div></label>
+          <label>Financed GAP<div class="money-input"><span>$</span><input id="gap" type="number" min="0" step="50" placeholder="Optional"></div></label>
+          <label>Warranty / service contract<div class="money-input"><span>$</span><input id="warranty" type="number" min="0" step="50" placeholder="Optional"></div></label>
+          <label>Other financed add-ons<div class="money-input"><span>$</span><input id="otherAddons" type="number" min="0" step="50" placeholder="Optional"></div></label>
+          <label>Other financed charges<div class="money-input"><span>$</span><input id="otherFinanced" type="number" min="0" step="50" placeholder="Optional"></div></label>
+          <label>Rebates / other credits<div class="money-input"><span>$</span><input id="rebatesCredits" type="number" min="0" step="50" placeholder="Optional"></div></label>
+        </div>
+        <label class="check-row"><input id="itemizationComplete" type="checkbox"><span>Entered price, credits, and financed extras are complete enough to check the disclosed amount financed</span></label>
       </div>
-      <p class="helper">LTV is calculated only when a vehicle value is entered. The tool does not supply or infer a vehicle value.</p>
     </section>
 
     <section class="card">
-      <div class="section-title"><span class="step">2</span><div><h2>Proposed financing</h2><p>Enter the terms shown in the proposed or final financing documents.</p></div></div>
+      <div class="section-title"><span class="step">2</span><div><h2>Proposed financing</h2><p>Enter the core proposed loan terms. Later-stage disclosures can be left blank when they are not yet available.</p></div></div>
       <div class="grid grid-3">
-        <label>APR<div class="percent-input"><input id="apr" type="number" min="0" max="100" step="0.001" placeholder="0"><span>%</span></div></label>
-        <label>Amount financed<div class="money-input"><span>$</span><input id="amountFinanced" type="number" min="0" step="100" placeholder="0"></div></label>
-        <label>Cash down payment<div class="money-input"><span>$</span><input id="cashDown" type="number" min="0" step="100" placeholder="0"></div></label>
-        <label>Monthly payment<div class="money-input"><span>$</span><input id="monthlyPayment" type="number" min="0" step="10" placeholder="0"></div></label>
-        <label>Loan term / number of payments<div class="suffix-input"><input id="termMonths" type="number" min="1" max="120" step="1" placeholder="60"><span>months</span></div></label>
-        <label>Total of payments<div class="money-input"><span>$</span><input id="totalPayments" type="number" min="0" step="100" placeholder="0"></div></label>
-        <label>Finance charge<div class="money-input"><span>$</span><input id="financeCharge" type="number" min="0" step="100" placeholder="0"></div></label>
-        <label>Stated interest rate (optional)<div class="percent-input"><input id="statedRate" type="number" min="0" max="100" step="0.001" placeholder="0"><span>%</span></div></label>
-        <label>Lender / dealer (optional)<input id="lender" type="text" placeholder="Name"></label>
+        <label>APR *<div class="percent-input"><input id="apr" type="number" min="0" max="100" step="0.001" placeholder="0"><span>%</span></div></label>
+        <label>Amount financed *<div class="money-input"><span>$</span><input id="amountFinanced" type="number" min="0" step="100" placeholder="0"></div></label>
+        <label>Monthly payment *<div class="money-input"><span>$</span><input id="monthlyPayment" type="number" min="0" step="10" placeholder="0"></div></label>
+        <label>Loan term / number of payments *<div class="suffix-input"><input id="termMonths" type="number" min="1" max="120" step="1" placeholder="60"><span>months</span></div></label>
+        <label>Cash down payment (optional)<div class="money-input"><span>$</span><input id="cashDown" type="number" min="0" step="100" placeholder="Optional"></div></label>
+        <label>Total of payments (optional)<div class="money-input"><span>$</span><input id="totalPayments" type="number" min="0" step="100" placeholder="Optional"></div></label>
+        <label>Finance charge (optional)<div class="money-input"><span>$</span><input id="financeCharge" type="number" min="0" step="100" placeholder="Optional"></div></label>
+        <label>Stated interest rate (optional)<div class="percent-input"><input id="statedRate" type="number" min="0" max="100" step="0.001" placeholder="Optional"><span>%</span></div></label>
+        <label>Lender / dealer (optional)<input id="lender" type="text" placeholder="If known"></label>
       </div>
+      <label class="check-row"><input id="equalPayments" type="checkbox"><span>Payment schedule consists of equal monthly payments</span></label>
       <div class="field-group financing-channel">
-        <span class="field-label">Financing channel</span>
+        <span class="field-label">Financing channel (optional)</span>
         <div class="radio-list">
           <label><input type="radio" name="financingChannel" value="Bank"> Bank</label>
           <label><input type="radio" name="financingChannel" value="Credit union"> Credit union</label>
@@ -77,64 +95,64 @@
     </section>
 
     <section class="card">
-      <div class="section-title"><span class="step">3</span><div><h2>Trade-in and amount financed</h2><p>Enter trade-in and itemized financing information when applicable.</p></div></div>
-      <label class="check-row"><input id="hasTrade" type="checkbox"><span>Trade-in involved</span></label>
-      <div id="tradeFields" class="grid grid-2 hidden">
-        <label>Trade-in allowance / value<div class="money-input"><span>$</span><input id="tradeAllowance" type="number" min="0" step="100" placeholder="0"></div></label>
-        <label>Existing lien payoff<div class="money-input"><span>$</span><input id="tradePayoff" type="number" min="0" step="100" placeholder="0"></div></label>
+      <div class="section-title"><span class="step">3</span><div><h2>Plan and budget</h2><p>Use the current plan and Schedules I/J to screen whether the proposed transaction can be absorbed while the plan continues.</p></div></div>
+      <div class="grid grid-3">
+        <label>Current monthly plan payment *<div class="money-input"><span>$</span><input id="planPayment" type="number" min="0" step="10" placeholder="0"></div></label>
+        <label>Current monthly net income from Schedules I/J *<div class="money-input"><span>$</span><input id="currentNetIncome" type="number" step="10" placeholder="0"></div></label>
+        <label>Change in net monthly income from proposed transaction *<div class="money-input"><span>$</span><input id="changeNetIncome" type="number" step="10" placeholder="Enter 0 if no change"></div></label>
+        <label>Gross monthly income, Schedule I (optional)<div class="money-input"><span>$</span><input id="grossIncome" type="number" min="0" step="100" placeholder="Optional"></div></label>
+        <label>Monthly expenses, Schedule J (optional)<div class="money-input"><span>$</span><input id="monthlyExpenses" type="number" min="0" step="100" placeholder="Optional"></div></label>
+        <label>Plan payment status (optional)<select id="planStatus"><option value="Unknown">Unknown / not entered</option><option value="Current">Current</option><option value="Delinquent">Delinquent</option></select></label>
       </div>
       <div class="subsection">
-        <h3>Optional amount-financed reconciliation</h3>
-        <p class="helper">Run this check only when the entered categories capture the transaction well enough to reconstruct the amount financed.</p>
-        <label class="check-row"><input id="itemizationComplete" type="checkbox"><span>Entered itemization is sufficiently complete for a reconciliation check</span></label>
-        <div class="grid grid-3">
-          <label>Financed taxes and fees<div class="money-input"><span>$</span><input id="taxesFees" type="number" min="0" step="50" placeholder="0"></div></label>
-          <label>Financed GAP<div class="money-input"><span>$</span><input id="gap" type="number" min="0" step="50" placeholder="0"></div></label>
-          <label>Warranty / service contract<div class="money-input"><span>$</span><input id="warranty" type="number" min="0" step="50" placeholder="0"></div></label>
-          <label>Other financed add-ons<div class="money-input"><span>$</span><input id="otherAddons" type="number" min="0" step="50" placeholder="0"></div></label>
-          <label>Other financed charges<div class="money-input"><span>$</span><input id="otherFinanced" type="number" min="0" step="50" placeholder="0"></div></label>
-          <label>Rebates / other credits<div class="money-input"><span>$</span><input id="rebatesCredits" type="number" min="0" step="50" placeholder="0"></div></label>
-        </div>
+        <label>If the projected budget is negative, how is the deficit addressed?<input id="deficitExplanation" type="text" placeholder="Amended Schedules I/J, plan modification, or other explanation"></label>
+        <p class="helper">This field is required only when the entered plan-and-budget figures leave a projected deficit.</p>
       </div>
     </section>
 
     <section class="card">
-      <div class="section-title"><span class="step">4</span><div><h2>Optional context</h2><p>Optional information for reference only.</p></div></div>
+      <div class="section-title"><span class="step">4</span><div><h2>Optional market context</h2><p>Use only information actually available in the record or obtained during the hearing.</p></div></div>
       <div class="grid grid-3">
-        <label>Credit score<input id="creditScore" type="number" min="0" max="900" step="1" placeholder="Optional"></label>
-        <label>Score model<input id="scoreModel" type="text" placeholder="VantageScore 4.0, FICO Auto Score"></label>
-        <label>Gross monthly income<div class="money-input"><span>$</span><input id="grossIncome" type="number" min="0" step="100" placeholder="Optional"></div></label>
-        <label>Total required monthly debt payments<div class="money-input"><span>$</span><input id="monthlyDebt" type="number" min="0" step="50" placeholder="Optional"></div></label>
-        <label>Comparable APR benchmark<div class="percent-input"><input id="benchmarkApr" type="number" min="0" max="100" step="0.001" placeholder="Optional"><span>%</span></div></label>
-        <label>Benchmark source / cohort<input id="benchmarkLabel" type="text" placeholder="Experian Q1 2026 used subprime"></label>
+        <label>Credit score (optional)<input id="creditScore" type="number" min="300" max="900" step="1" placeholder="If available"></label>
+        <label>Comparable APR benchmark (optional)<div class="percent-input"><input id="benchmarkApr" type="number" min="0" max="100" step="0.001" placeholder="Optional"><span>%</span></div></label>
+        <label>Benchmark source / cohort (optional)<input id="benchmarkLabel" type="text" placeholder="Figure 1 tier or current market source"></label>
+        <label>Financing attempts / alternatives (optional)<input id="financingAttempts" type="text" placeholder="Other lenders, offers, or shopping results"></label>
       </div>
-      <label class="check-row"><input id="equalPayments" type="checkbox"><span>Payment schedule consists of equal monthly payments</span></label>
+      <p class="helper">If a credit score is available but the score model is unknown, use it only as an approximate reference and do not treat it as directly equivalent to a particular scoring model.</p>
     </section>
 
     <section class="card result-card">
-      <div class="section-title"><span class="step">5</span><div><h2>Review</h2><p>Calculated results based on the values entered above.</p></div></div>
-      <div class="metric-grid">
-        <div class="metric"><span>LTV</span><strong id="metricLtv">—</strong></div>
-        <div class="metric"><span>Amount above / below vehicle value</span><strong id="metricAboveValue">—</strong></div>
-        <div class="metric"><span>Trade-in equity</span><strong id="metricTradeEquity">—</strong></div>
-        <div class="metric"><span>APR difference</span><strong id="metricAprDiff">—</strong></div>
+      <div class="section-title"><span class="step">5</span><div><h2>Review</h2><p>Run the review after completing all required fields.</p></div></div>
+      <div class="toolbar">
+        <button class="button" id="runButton" type="button">Run review</button>
+        <button class="button secondary" id="clearButton" type="button">Clear all</button>
       </div>
-      <h3>Items for Review</h3>
-      <div id="flagsEmpty" class="empty-state">No review items generated from the information entered.</div>
-      <div id="flagsTableWrap" class="table-wrap hidden"><table><thead><tr><th>Area</th><th>Review item</th><th>Basis</th></tr></thead><tbody id="flagsBody"></tbody></table></div>
-      <p class="footnote-note">An item appears here only when the entered figures meet the arithmetic condition shown in the Basis column. The tool does not determine whether the transaction should be approved or whether additional shopping is required.</p>
-      <h3>Results</h3>
-      <div class="table-wrap"><table><thead><tr><th>Section</th><th>Item</th><th>Result</th></tr></thead><tbody id="resultsBody"></tbody></table></div>
-      <div class="toolbar bottom-actions"><button class="button" id="printButton" type="button">Print review</button><button class="button secondary" id="clearButton" type="button">Clear all</button></div>
+      <div id="reviewPrompt" class="empty-state">Complete the required fields above, then select Run review.</div>
+      <div id="reviewOutput" class="hidden">
+        <div class="metric-grid">
+          <div class="metric"><span>LTV</span><strong id="metricLtv">—</strong></div>
+          <div class="metric"><span>Amount above / below vehicle value</span><strong id="metricAboveValue">—</strong></div>
+          <div class="metric"><span>Projected amount remaining after plan payment</span><strong id="metricBudgetCushion">—</strong></div>
+          <div class="metric"><span>APR difference</span><strong id="metricAprDiff">—</strong></div>
+        </div>
+        <h3>Items for Review</h3>
+        <div id="flagsEmpty" class="empty-state">No review items generated from the information entered.</div>
+        <div id="flagsTableWrap" class="table-wrap hidden"><table><thead><tr><th>Area</th><th>Review item</th><th>Basis</th></tr></thead><tbody id="flagsBody"></tbody></table></div>
+        <p class="footnote-note">An item appears here only when the entered figures meet the arithmetic or record condition shown in the Basis column. The tool does not determine whether the transaction should be approved or whether additional shopping is required.</p>
+        <h3>Results</h3>
+        <div class="table-wrap"><table><thead><tr><th>Section</th><th>Item</th><th>Result</th></tr></thead><tbody id="resultsBody"></tbody></table></div>
+        <div class="toolbar bottom-actions"><button class="button" id="printButton" type="button">Print review</button></div>
+      </div>
     </section>
 
     <section class="definitions">
       <details><summary>Calculation definitions</summary><div class="definition-body">
         <p><strong>LTV</strong> = amount financed ÷ entered vehicle value × 100. LTV is shown only when a vehicle value is entered.</p>
-        <p><strong>Trade-in equity</strong> = trade-in allowance − existing lien payoff. A negative result is negative equity.</p>
-        <p><strong>Amount-financed reconstruction</strong> = cash price + entered financed taxes/fees + GAP + warranty/service contract + other add-ons + other financed charges + negative equity − cash down payment − rebates/credits − positive trade-in equity.</p>
+        <p><strong>Amount-financed reconstruction</strong> = cash price + entered financed taxes/fees + GAP + warranty/service contract + other add-ons + other financed charges − cash down payment − rebates/credits.</p>
+        <p><strong>Projected net monthly income</strong> = current net monthly income + entered change in net monthly income.</p>
+        <p><strong>Projected amount remaining after plan payment</strong> = projected net monthly income − current monthly plan payment.</p>
         <p><strong>Equal-payment scheduled sum</strong> = monthly payment × number of payments.</p>
-        <p><strong>PTI / DTI</strong> and the <strong>APR benchmark difference</strong> are descriptive only and do not create automatic review items.</p>
+        <p><strong>APR benchmark difference</strong> is descriptive only and does not create an automatic review item.</p>
       </div></details>
     </section>
   </main>
