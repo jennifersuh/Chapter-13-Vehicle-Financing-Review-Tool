@@ -21,8 +21,7 @@
 
   <main class="wrap">
     <section class="notice">
-      Entries are calculated in the browser and are not stored or transmitted by this page.
-      Refreshing or closing the page clears the entries. Fields marked * are required to run the review.
+      Entries are calculated in the browser and are not stored or transmitted by this page. Refreshing or closing the page clears the entries. Fields marked * are required to run the review. After running the review, you can print the page for a hearing file or future reference.
     </section>
 
     <section class="card">
@@ -42,16 +41,17 @@
         <div class="grid grid-3">
           <label>Dealer cash price * (cash price shown for the vehicle)<div class="money-input"><span>$</span><input id="cashPrice" type="number" min="0" step="100" placeholder="0"></div></label>
           <label>Supported vehicle value (optional; single value used for LTV)<div class="money-input"><span>$</span><input id="supportedValue" type="number" min="0" step="100" placeholder="If available"></div></label>
-          <label>Value source (optional; e.g., KBB, J.D. Power, local comparable)<input id="valueSource" type="text" placeholder="Source used for the value"></label>
+          <label>Value source (optional; source provided or cited for the value)<input id="valueSource" type="text" placeholder="Debtor's KBB, J.D. Power, dealer valuation, local comparable"></label>
         </div>
         <div class="toolbar">
           <a class="button secondary" href="https://www.kbb.com/car-values/" target="_blank" rel="noopener noreferrer">Open Kelley Blue Book</a>
-          <span class="helper">LTV and price-to-value calculations run only when a supported vehicle value is entered.</span>
+          <span class="helper">Enter the value and source actually relied on or supplied in the record when available. LTV and price-to-value calculations run only when a supported vehicle value is entered.</span>
         </div>
       </div>
 
       <div class="subsection">
         <h3>Financed extras (optional)</h3>
+        <p class="helper">These fields identify amounts included in the financing beyond the vehicle cash price. The calculated review shows their combined amount and share of the amount financed; no automatic reasonableness threshold is applied.</p>
         <div class="grid grid-3">
           <label>Financed taxes and fees (amount included in financing)<div class="money-input"><span>$</span><input id="taxesFees" type="number" min="0" step="50" placeholder="Optional"></div></label>
           <label>Financed GAP (amount financed for GAP coverage)<div class="money-input"><span>$</span><input id="gap" type="number" min="0" step="50" placeholder="Optional"></div></label>
@@ -83,9 +83,9 @@
       <div class="field-group financing-channel">
         <span class="field-label">How financing was obtained</span>
         <div class="radio-list">
-          <label><input type="radio" name="financingChannel" value="Direct from lender"> Direct from bank / credit union / finance company</label>
-          <label><input type="radio" name="financingChannel" value="Dealer-arranged through outside lender"> Dealer-arranged through outside lender</label>
-          <label><input type="radio" name="financingChannel" value="Dealer financing in-house / BHPH"> Dealer financing in-house / BHPH</label>
+          <label><input type="radio" name="financingChannel" value="Direct from lender"> Direct from bank / credit union / finance company (the borrower obtains the loan directly from the lender rather than through the dealer)</label>
+          <label><input type="radio" name="financingChannel" value="Dealer-arranged through outside lender"> Dealer-arranged through outside lender (the dealer submits or arranges the credit application, but a separate bank, credit union, or finance company is the creditor)</label>
+          <label><input type="radio" name="financingChannel" value="Dealer financing in-house / BHPH"> Dealer financing in-house / BHPH (Buy Here Pay Here: the dealer sells the vehicle and itself, or through an affiliated entity, provides or services the financing)</label>
           <label><input type="radio" name="financingChannel" value="Unknown" checked> Unknown</label>
         </div>
       </div>
@@ -111,9 +111,10 @@
     </section>
 
     <section class="card result-card">
-      <div class="section-title"><span class="step">3</span><div><h2>Calculated Review</h2><p>Run the review after completing all required fields.</p></div></div>
+      <div class="section-title"><span class="step">3</span><div><h2>Calculated Review</h2><p>Run the review after completing all required fields. Use Print page to save the completed review for a hearing file or future reference.</p></div></div>
       <div class="toolbar">
         <button class="button" id="runButton" type="button">Run review</button>
+        <button class="button secondary" id="printPageButton" type="button">Print page</button>
         <button class="button secondary" id="clearButton" type="button">Clear all</button>
       </div>
       <div id="reviewPrompt" class="empty-state">Complete the required fields above, then select Run review.</div>
@@ -121,6 +122,7 @@
         <div class="review-section">
           <h3>Vehicle / financing</h3>
           <div class="review-list" id="vehicleSummary"></div>
+          <p class="footnote-note" id="vehicleNote"></p>
         </div>
 
         <div class="review-section">
@@ -140,8 +142,6 @@
           <summary>Entered details</summary>
           <div class="table-wrap"><table><thead><tr><th>Section</th><th>Item</th><th>Result</th></tr></thead><tbody id="resultsBody"></tbody></table></div>
         </details>
-
-        <div class="toolbar bottom-actions"><button class="button" id="printButton" type="button">Print review</button></div>
       </div>
     </section>
 
@@ -150,7 +150,8 @@
         <p><strong>Price vs. value</strong> = dealer cash price − entered supported vehicle value, with the percentage difference measured against the supported value.</p>
         <p><strong>LTV</strong> = amount financed ÷ entered supported vehicle value × 100.</p>
         <p><strong>Down-payment share</strong> = cash down payment ÷ dealer cash price × 100.</p>
-        <p><strong>Financed add-ons</strong> = financed GAP + warranty/service contract + other financed add-ons. Taxes, fees, and other financed charges are displayed separately and are not included in this add-on subtotal.</p>
+        <p><strong>Financed add-ons</strong> = financed GAP + warranty/service contract + other financed add-ons.</p>
+        <p><strong>Total entered financed extras</strong> = financed taxes and fees + GAP + warranty/service contract + other financed add-ons + other separately identified financed charges. Rebates and credits are not included in this subtotal.</p>
         <p><strong>APR comparison</strong> uses the Q1 2026 Experian average used-vehicle APR for the selected VantageScore 4.0 tier. It is not calculated for a new vehicle, a different/unknown score model, or when APR is not entered.</p>
       </div></details>
     </section>
