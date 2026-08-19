@@ -46,13 +46,12 @@
         </div>
         <div class="toolbar">
           <a class="button secondary" href="https://www.kbb.com/car-values/" target="_blank" rel="noopener noreferrer">Open Kelley Blue Book</a>
-          <span class="helper">Vehicle value is not required. LTV is calculated only when a sufficiently supported value is entered; the tool does not supply or infer one.</span>
+          <span class="helper">Vehicle value is not required. LTV is calculated only when a supported value is entered.</span>
         </div>
       </div>
 
       <div class="subsection">
         <h3>Financed extras (optional)</h3>
-        <p class="helper">Enter these only when they are shown in the transaction documents or otherwise available in the record.</p>
         <div class="grid grid-3">
           <label>Financed taxes and fees<div class="money-input"><span>$</span><input id="taxesFees" type="number" min="0" step="50" placeholder="Optional"></div></label>
           <label>Financed GAP<div class="money-input"><span>$</span><input id="gap" type="number" min="0" step="50" placeholder="Optional"></div></label>
@@ -61,26 +60,25 @@
           <label>Other financed charges<div class="money-input"><span>$</span><input id="otherFinanced" type="number" min="0" step="50" placeholder="Optional"></div></label>
           <label>Rebates / other credits<div class="money-input"><span>$</span><input id="rebatesCredits" type="number" min="0" step="50" placeholder="Optional"></div></label>
         </div>
-        <label class="check-row"><input id="itemizationComplete" type="checkbox"><span>Entered price, credits, and financed extras are complete enough to check the disclosed amount financed</span></label>
       </div>
     </section>
 
     <section class="card">
-      <div class="section-title"><span class="step">2</span><div><h2>Proposed financing</h2><p>Enter APR when available. If APR is not yet available, the stated interest rate can be entered instead; APR benchmark comparisons run only when APR is entered.</p></div></div>
+      <div class="section-title"><span class="step">2</span><div><h2>Proposed financing</h2><p>Enter APR when available. If APR is not yet available, enter the stated interest rate instead.</p></div></div>
       <div class="grid grid-3">
-        <label>APR (enter if available)<div class="percent-input"><input id="apr" type="number" min="0" max="100" step="0.001" placeholder="If available"><span>%</span></div></label>
+        <label>APR (if available)<div class="percent-input"><input id="apr" type="number" min="0" max="100" step="0.001" placeholder="If available"><span>%</span></div></label>
         <label>Amount financed *<div class="money-input"><span>$</span><input id="amountFinanced" type="number" min="0" step="100" placeholder="0"></div></label>
         <label>Monthly payment *<div class="money-input"><span>$</span><input id="monthlyPayment" type="number" min="0" step="10" placeholder="0"></div></label>
 
-        <label>Interest rate (enter if available)<div class="percent-input"><input id="statedRate" type="number" min="0" max="100" step="0.001" placeholder="If separately stated"><span>%</span></div></label>
+        <label>Interest rate (if available)<div class="percent-input"><input id="statedRate" type="number" min="0" max="100" step="0.001" placeholder="If separately stated"><span>%</span></div></label>
         <label>Loan term / number of payments *<div class="suffix-input"><input id="termMonths" type="number" min="1" max="120" step="1" placeholder="60"><span>months</span></div></label>
         <label>Cash down payment (optional)<div class="money-input"><span>$</span><input id="cashDown" type="number" min="0" step="100" placeholder="Optional"></div></label>
 
         <label>Total of payments (optional)<div class="money-input"><span>$</span><input id="totalPayments" type="number" min="0" step="100" placeholder="Optional"></div></label>
-        <label>Finance charge (optional)<div class="money-input"><span>$</span><input id="financeCharge" type="number" min="0" step="100" placeholder="Optional"></div></label>
+        <label>Finance charge (optional; dollar cost of credit)<div class="money-input"><span>$</span><input id="financeCharge" type="number" min="0" step="100" placeholder="If disclosed"></div></label>
         <label>Lender / dealer (optional)<input id="lender" type="text" placeholder="If known"></label>
       </div>
-      <p class="helper">At least APR or the stated interest rate must be entered. APR and interest rate are separate measures; the tool does not substitute one for the other.</p>
+      <p class="helper">At least APR or the stated interest rate must be entered. The tool keeps them separate and does not substitute one for the other.</p>
 
       <div class="field-group financing-channel">
         <span class="field-label">Financing channel (optional)</span>
@@ -97,38 +95,36 @@
       </div>
 
       <div class="subsection">
-        <h3>Borrower and market context (optional)</h3>
+        <h3>Borrower and credit context</h3>
         <div class="grid grid-3">
-          <label>Credit score<input id="creditScore" type="number" min="300" max="900" step="1" placeholder="If available"></label>
-          <label>Credit score model<input id="scoreModel" type="text" placeholder="VantageScore 4.0, FICO, auto-specific score"></label>
-          <label>Gross monthly income for PTI<div class="money-input"><span>$</span><input id="grossIncome" type="number" min="0" step="100" placeholder="Optional"></div></label>
-          <label>Comparable APR benchmark<div class="percent-input"><input id="benchmarkApr" type="number" min="0" max="100" step="0.001" placeholder="Optional"><span>%</span></div></label>
-          <label>Benchmark source / cohort<input id="benchmarkLabel" type="text" placeholder="Figure 1 tier or current market source"></label>
-          <label>Financing attempts / alternatives<input id="financingAttempts" type="text" placeholder="Other lenders, offers, or shopping results"></label>
+          <label>VantageScore 4.0 credit tier *
+            <select id="creditTier">
+              <option value="">Select tier or unavailable</option>
+              <option>Super prime (781–850)</option>
+              <option>Prime (661–780)</option>
+              <option>Near prime (601–660)</option>
+              <option>Subprime (501–600)</option>
+              <option>Deep subprime (300–500)</option>
+              <option>Unavailable / different score model</option>
+            </select>
+          </label>
+          <label>Credit score (if available)<input id="creditScore" type="number" min="300" max="850" step="1" placeholder="Optional"></label>
+          <label>Gross monthly income (if available)<div class="money-input"><span>$</span><input id="grossIncome" type="number" min="0" step="100" placeholder="Optional"></div></label>
         </div>
-        <p class="helper">PTI uses the separate gross-income figure entered here and is displayed for reference only. If the credit-score model is unknown, do not treat the score as directly equivalent to a particular benchmark tier. APR benchmarks are compared with APR only, not with the stated interest rate.</p>
+        <p class="helper">Tier ranges shown are the Q1 2026 Experian auto-finance ranges using VantageScore 4.0. If the available score uses another model, select “Unavailable / different score model” rather than mapping it directly.</p>
       </div>
     </section>
 
     <section class="card">
-      <div class="section-title"><span class="step">3</span><div><h2>Chapter 13 plan and projected budget</h2><p>The proposed monthly vehicle payment from Section 2 is carried into this calculation automatically. Enter the current Schedule J position and only the monthly amounts that will change.</p></div></div>
+      <div class="section-title"><span class="step">3</span><div><h2>Chapter 13 plan and budget</h2><p>Use the current plan and Schedule J information together with the change in net monthly income stated for the proposed transaction.</p></div></div>
       <div class="grid grid-3">
         <label>Current monthly plan payment *<div class="money-input"><span>$</span><input id="planPayment" type="number" min="0" step="10" placeholder="0"></div></label>
         <label>Current Schedule J monthly net income *<div class="money-input"><span>$</span><input id="currentNetIncome" type="number" step="10" placeholder="0"></div></label>
-        <label>Vehicle payment being replaced *<div class="money-input"><span>$</span><input id="replacedVehiclePayment" type="number" min="0" step="10" placeholder="Enter 0 if none"></div></label>
-
-        <label>Current monthly vehicle insurance (optional)<div class="money-input"><span>$</span><input id="currentInsurance" type="number" min="0" step="10" placeholder="Enter with projected insurance"></div></label>
-        <label>Projected monthly vehicle insurance (optional)<div class="money-input"><span>$</span><input id="projectedInsurance" type="number" min="0" step="10" placeholder="Enter with current insurance"></div></label>
-        <label>Other monthly vehicle-cost change (optional)<div class="money-input"><span>$</span><input id="otherVehicleCostChange" type="number" step="10" placeholder="+ increase / - decrease"></div></label>
-
-        <label>Other change in monthly income (optional)<div class="money-input"><span>$</span><input id="monthlyIncomeChange" type="number" step="10" placeholder="+ increase / - decrease"></div></label>
-        <label>Date of Schedules I/J (optional)<input id="scheduleDate" type="date"></label>
+        <label>Change in net monthly income from proposed transaction *<div class="money-input"><span>$</span><input id="changeNetIncome" type="number" step="10" placeholder="Enter 0 if no change"></div></label>
         <label>Plan payment status (optional)<select id="planStatus"><option value="Unknown">Unknown / not entered</option><option value="Current">Current</option><option value="Delinquent">Delinquent</option></select></label>
       </div>
-      <p class="helper">The vehicle-payment change is proposed payment minus the payment being replaced. If insurance is included, enter both the current and projected amounts. Other vehicle-cost change can capture a known monthly increase or decrease not already reflected above.</p>
       <div class="subsection">
-        <label>If the projected amount remaining after the plan payment is negative, how is the deficit addressed?<input id="deficitExplanation" type="text" placeholder="Amended Schedules I/J, plan modification, or other explanation"></label>
-        <p class="helper">This field is required only when the entered figures leave a projected deficit.</p>
+        <label>If the projected Schedule J net income is negative, how is the deficit addressed?<input id="deficitExplanation" type="text" placeholder="Amended Schedules I/J, plan modification, or other explanation"></label>
       </div>
     </section>
 
@@ -143,10 +139,8 @@
         <div class="metric-grid">
           <div class="metric"><span>LTV</span><strong id="metricLtv">—</strong></div>
           <div class="metric"><span>Amount above / below vehicle value</span><strong id="metricAboveValue">—</strong></div>
-          <div class="metric"><span>PTI</span><strong id="metricPti">—</strong></div>
           <div class="metric"><span>Projected Schedule J net income</span><strong id="metricProjectedNet">—</strong></div>
-          <div class="metric"><span>Projected amount remaining after plan payment</span><strong id="metricBudgetCushion">—</strong></div>
-          <div class="metric"><span>APR difference</span><strong id="metricAprDiff">—</strong></div>
+          <div class="metric"><span>Credit tier</span><strong id="metricCreditTier">—</strong></div>
         </div>
         <h3>Items for Review</h3>
         <div id="flagsEmpty" class="empty-state">No review items generated from the information entered.</div>
@@ -161,12 +155,8 @@
     <section class="definitions">
       <details><summary>Calculation definitions</summary><div class="definition-body">
         <p><strong>LTV</strong> = amount financed ÷ entered vehicle value × 100. LTV is shown only when a vehicle value is entered.</p>
-        <p><strong>PTI</strong> = proposed monthly vehicle payment ÷ entered gross monthly income × 100. It is displayed for reference only and does not create an automatic review item.</p>
-        <p><strong>Net increase in monthly vehicle costs</strong> = (proposed vehicle payment − vehicle payment being replaced) + (projected insurance − current insurance, when both are entered) + other entered monthly vehicle-cost change.</p>
-        <p><strong>Projected Schedule J net income</strong> = current Schedule J monthly net income + other entered monthly income change − net increase in monthly vehicle costs.</p>
-        <p><strong>Projected amount remaining after plan payment</strong> = projected Schedule J net income − current monthly plan payment.</p>
-        <p><strong>Amount-financed reconstruction</strong> = cash price + entered financed taxes/fees + GAP + warranty/service contract + other add-ons + other financed charges − cash down payment − rebates/credits.</p>
-        <p><strong>APR benchmark difference</strong> = entered APR − entered APR benchmark. No APR comparison is calculated from the stated interest rate.</p>
+        <p><strong>Projected Schedule J net income</strong> = current Schedule J monthly net income + entered change in net monthly income.</p>
+        <p><strong>Finance charge</strong> is entered from the credit disclosure when available; the tool does not calculate it.</p>
       </div></details>
     </section>
   </main>
