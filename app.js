@@ -49,7 +49,6 @@ function collectData() {
     otherAddons: numberValue("otherAddons"),
     otherFinanced: numberValue("otherFinanced"),
     rebatesCredits: numberValue("rebatesCredits"),
-    itemizationComplete: $("itemizationComplete").checked,
 
     apr: numberValue("apr"),
     amountFinanced: numberValue("amountFinanced"),
@@ -62,21 +61,13 @@ function collectData() {
     lender: textValue("lender"),
     financingChannel: radioValue("financingChannel"),
 
+    creditTier: textValue("creditTier"),
     creditScore: numberValue("creditScore"),
-    scoreModel: textValue("scoreModel"),
     grossIncome: numberValue("grossIncome"),
-    benchmarkApr: numberValue("benchmarkApr"),
-    benchmarkLabel: textValue("benchmarkLabel"),
-    financingAttempts: textValue("financingAttempts"),
 
     planPayment: numberValue("planPayment"),
     currentNetIncome: numberValue("currentNetIncome"),
-    replacedVehiclePayment: numberValue("replacedVehiclePayment"),
-    currentInsurance: numberValue("currentInsurance"),
-    projectedInsurance: numberValue("projectedInsurance"),
-    otherVehicleCostChange: numberValue("otherVehicleCostChange"),
-    monthlyIncomeChange: numberValue("monthlyIncomeChange"),
-    scheduleDate: textValue("scheduleDate"),
+    changeNetIncome: numberValue("changeNetIncome"),
     planStatus: textValue("planStatus"),
     deficitExplanation: textValue("deficitExplanation")
   };
@@ -92,23 +83,15 @@ function missingRequiredFields(data) {
   if (!(data.amountFinanced > 0)) missing.push("Amount financed");
   if (!(data.monthlyPayment > 0)) missing.push("Monthly payment");
   if (!(data.termMonths > 0)) missing.push("Loan term / number of payments");
-  if (!(data.apr > 0) && !(data.statedRate > 0)) missing.push("APR or stated interest rate");
+  if (!(data.apr > 0) && !(data.statedRate > 0)) missing.push("APR or interest rate");
+  if (!data.creditTier) missing.push("VantageScore 4.0 credit tier or unavailable");
   if (textValue("planPayment") === "") missing.push("Current monthly plan payment");
   if (textValue("currentNetIncome") === "") missing.push("Current Schedule J monthly net income");
-  if (textValue("replacedVehiclePayment") === "") missing.push("Vehicle payment being replaced");
+  if (textValue("changeNetIncome") === "") missing.push("Change in net monthly income from proposed transaction");
 
-  const insuranceOneOnly = (textValue("currentInsurance") === "") !== (textValue("projectedInsurance") === "");
-  if (insuranceOneOnly) missing.push("Both current and projected vehicle insurance, or neither");
-
-  const vehiclePaymentChange = data.monthlyPayment - data.replacedVehiclePayment;
-  const insuranceChange = (textValue("currentInsurance") !== "" && textValue("projectedInsurance") !== "")
-    ? data.projectedInsurance - data.currentInsurance
-    : 0;
-  const netVehicleCostChange = vehiclePaymentChange + insuranceChange + data.otherVehicleCostChange;
-  const projectedNet = data.currentNetIncome + data.monthlyIncomeChange - netVehicleCostChange;
-  const projectedRemaining = projectedNet - data.planPayment;
-  if (projectedRemaining < 0 && !data.deficitExplanation) {
-    missing.push("Explanation for projected budget deficit");
+  const projectedNetIncome = data.currentNetIncome + data.changeNetIncome;
+  if (projectedNetIncome < 0 && !data.deficitExplanation) {
+    missing.push("Explanation for projected Schedule J deficit");
   }
   return missing;
 }
@@ -116,10 +99,8 @@ function missingRequiredFields(data) {
 function render(output) {
   $("metricLtv").textContent = output.metrics.ltv;
   $("metricAboveValue").textContent = output.metrics.amountAboveValue;
-  $("metricPti").textContent = output.metrics.pti;
   $("metricProjectedNet").textContent = output.metrics.projectedNetIncome;
-  $("metricBudgetCushion").textContent = output.metrics.budgetCushion;
-  $("metricAprDiff").textContent = output.metrics.aprDifference;
+  $("metricCreditTier").textContent = output.metrics.creditTier;
 
   const resultsBody = $("resultsBody");
   resultsBody.innerHTML = output.results.map(([section, item, result]) =>
@@ -192,9 +173,7 @@ async function bootPython() {
 
 function clearAll() {
   document.querySelectorAll("input").forEach((el) => {
-    if (el.type === "checkbox") {
-      el.checked = false;
-    } else if (el.type === "radio") {
+    if (el.type === "radio") {
       el.checked = el.name === "financingChannel" && el.value === "Unknown";
     } else {
       el.value = "";
