@@ -5,12 +5,15 @@ let pyodideReady = false;
 let calculator = null;
 
 function numberValue(id) {
-  const value = parseFloat($(id).value);
+  const el = $(id);
+  if (!el) return 0;
+  const value = parseFloat(el.value);
   return Number.isFinite(value) ? value : 0;
 }
 
 function textValue(id) {
-  return ($(id).value || "").trim();
+  const el = $(id);
+  return el ? (el.value || "").trim() : "";
 }
 
 function radioValue(name) {
@@ -33,17 +36,12 @@ function collectData() {
     year: textValue("year"),
     make: textValue("make"),
     model: textValue("model"),
-    trim: textValue("trim"),
     mileage: numberValue("mileage"),
     condition: textValue("condition"),
-    zipCode: textValue("zipCode"),
     vin: textValue("vin"),
     cashPrice: numberValue("cashPrice"),
     supportedValue: numberValue("supportedValue"),
-    marketLow: numberValue("marketLow"),
-    marketHigh: numberValue("marketHigh"),
     valueSource: textValue("valueSource"),
-    valuationDate: textValue("valuationDate"),
 
     apr: numberValue("apr"),
     amountFinanced: numberValue("amountFinanced"),
@@ -155,18 +153,10 @@ function clearAll() {
   document.getElementById("vehicleStatus").value = "Used";
   document.getElementById("condition").value = "";
   document.getElementById("tradeFields").classList.add("hidden");
-  setToday();
   calculate();
 }
 
-function setToday() {
-  const now = new Date();
-  const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
-  document.getElementById("valuationDate").value = local.toISOString().slice(0, 10);
-}
-
 document.addEventListener("DOMContentLoaded", async () => {
-  setToday();
   document.getElementById("hasTrade").addEventListener("change", () => {
     document.getElementById("tradeFields").classList.toggle(
       "hidden",
