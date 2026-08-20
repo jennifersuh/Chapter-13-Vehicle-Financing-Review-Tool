@@ -34,37 +34,37 @@
         <label>Mileage<input id="mileage" type="number" min="0" step="1000" placeholder="If known"></label>
         <label>Condition<select id="condition"><option value="">Unknown</option><option>Excellent</option><option>Very Good</option><option>Good</option><option>Fair</option><option>Poor / significant defects</option></select></label>
         <label>Dealer cash price *<div class="money-input"><span>$</span><input id="cashPrice" type="number" min="0" step="100" placeholder="0"></div></label>
-        <label>Supported vehicle value (if available)<div class="money-input"><span>$</span><input id="supportedValue" type="number" min="0" step="100" placeholder="Value supplied or checked"></div></label>
-        <label>Value source (if available)<input id="valueSource" type="text" placeholder="Debtor's KBB, J.D. Power, local comparable"></label>
+        <label>Supported vehicle value (debtor-provided or independently checked market value)<div class="money-input"><span>$</span><input id="supportedValue" type="number" min="0" step="100" placeholder="If available"></div></label>
+        <label>Value source (e.g., KBB, J.D. Power, dealer valuation, or comparable listing)<input id="valueSource" type="text" placeholder="If available"></label>
       </div>
       <p class="helper">Use the value supplied by the debtor when available. The KBB link below can be used for an independent check if useful.</p>
       <div class="toolbar compact-toolbar">
         <a class="button secondary" href="https://www.kbb.com/car-values/" target="_blank" rel="noopener noreferrer">Open Kelley Blue Book</a>
       </div>
 
-      <details class="optional-details">
-        <summary>Financed extras (if any)</summary>
-        <p class="helper">Enter amounts that are included in the financing so the review can show how much of the loan is not the vehicle price.</p>
+      <div class="subsection compact-subsection financed-extras">
+        <h3>Financed extras (only if included in the proposed financing)</h3>
+        <p class="helper">Enter only amounts actually financed as part of the transaction.</p>
         <div class="grid grid-2">
-          <label>Financed taxes and fees<div class="money-input"><span>$</span><input id="taxesFees" type="number" min="0" step="50" placeholder="If any"></div></label>
-          <label>Financed GAP<div class="money-input"><span>$</span><input id="gap" type="number" min="0" step="50" placeholder="If any"></div></label>
-          <label>Warranty / service contract<div class="money-input"><span>$</span><input id="warranty" type="number" min="0" step="50" placeholder="If any"></div></label>
-          <label>Other financed add-ons<div class="money-input"><span>$</span><input id="otherAddons" type="number" min="0" step="50" placeholder="If any"></div></label>
+          <label>Financed taxes and fees<div class="money-input"><span>$</span><input id="taxesFees" type="number" min="0" step="50" placeholder="0"></div></label>
+          <label>Financed GAP<div class="money-input"><span>$</span><input id="gap" type="number" min="0" step="50" placeholder="0"></div></label>
+          <label>Warranty / service contract<div class="money-input"><span>$</span><input id="warranty" type="number" min="0" step="50" placeholder="0"></div></label>
+          <label>Other financed add-ons<div class="money-input"><span>$</span><input id="otherAddons" type="number" min="0" step="50" placeholder="0"></div></label>
         </div>
-      </details>
+      </div>
     </section>
 
     <section class="card input-card">
       <div class="section-title"><span class="step">2</span><div><h2>Proposed financing</h2></div></div>
       <div class="grid grid-3">
-        <label>APR *<div class="percent-input"><input id="apr" type="number" min="0" max="100" step="0.001" placeholder="0"><span>%</span></div></label>
-        <label>Amount financed * (Regulation Z)<div class="money-input"><span>$</span><input id="amountFinanced" type="number" min="0" step="100" placeholder="0"></div></label>
+        <label>APR * (Regulation Z annual percentage rate)<div class="percent-input"><input id="apr" type="number" min="0" max="100" step="0.001" placeholder="0"><span>%</span></div></label>
+        <label>Amount financed * (Regulation Z amount financed)<div class="money-input"><span>$</span><input id="amountFinanced" type="number" min="0" step="100" placeholder="0"></div></label>
         <label>Monthly payment *<div class="money-input"><span>$</span><input id="monthlyPayment" type="number" min="0" step="10" placeholder="0"></div></label>
-        <label>Interest rate (if separately stated)<div class="percent-input"><input id="statedRate" type="number" min="0" max="100" step="0.001" placeholder="If stated"><span>%</span></div></label>
+        <label>Interest rate (if separately stated by lender or dealer)<div class="percent-input"><input id="statedRate" type="number" min="0" max="100" step="0.001" placeholder="If stated"><span>%</span></div></label>
         <label>Loan term / number of payments *<div class="suffix-input"><input id="termMonths" type="number" min="1" max="120" step="1" placeholder="60"><span>months</span></div></label>
         <label>Cash down payment<div class="money-input"><span>$</span><input id="cashDown" type="number" min="0" step="100" placeholder="0 if none"></div></label>
-        <label>Total of payments (if available)<div class="money-input"><span>$</span><input id="totalPayments" type="number" min="0" step="100" placeholder="If disclosed"></div></label>
-        <label>Finance charge (if available)<div class="money-input"><span>$</span><input id="financeCharge" type="number" min="0" step="100" placeholder="If disclosed"></div></label>
+        <label>Total of payments (if disclosed in Regulation Z)<div class="money-input"><span>$</span><input id="totalPayments" type="number" min="0" step="100" placeholder="If disclosed"></div></label>
+        <label>Finance charge (if disclosed; total dollar cost of credit)<div class="money-input"><span>$</span><input id="financeCharge" type="number" min="0" step="100" placeholder="If disclosed"></div></label>
         <label>Lender / creditor<input id="lender" type="text" placeholder="If known"></label>
       </div>
       <p class="helper">Use APR for the market comparison. The stated interest rate is kept separate because it is not interchangeable with APR.</p>
@@ -83,7 +83,7 @@
         <h3>Credit context</h3>
         <div class="grid grid-2">
           <label>Experian Q1 2026 VantageScore 4.0 credit tier *<select id="creditTier"><option value="">Select tier or unavailable</option><option>Super prime (781–850)</option><option>Prime (661–780)</option><option>Near prime (601–660)</option><option>Subprime (501–600)</option><option>Deep subprime (300–500)</option><option>Unavailable / different score model</option></select></label>
-          <label>Credit score (if available; VantageScore 4.0 only)<input id="creditScore" type="number" min="300" max="850" step="1" placeholder="If available"></label>
+          <label>Credit score (only if VantageScore 4.0)<input id="creditScore" type="number" min="300" max="850" step="1" placeholder="If available"></label>
         </div>
       </div>
     </section>
