@@ -238,7 +238,8 @@ async function loadExample() {
 async function bootPython() {
   try {
     window.pyodide = await loadPyodide();
-    const response = await fetch("calculator.py");
+    const response = await fetch(`calculator.py?v=${Date.now()}`, { cache: "no-store" });
+    if (!response.ok) throw new Error(`Calculator load failed: ${response.status}`);
     const source = await response.text();
     pyodide.FS.writeFile("calculator.py", source);
     calculator = pyodide.pyimport("calculator");
