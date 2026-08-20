@@ -18,6 +18,12 @@ TIER_DATA = {
     "Deep subprime (300–500)": {"low": 300, "high": 500, "used_apr": 21.77},
 }
 
+# Tool-defined screening triggers for unusually large deviations. These are
+# not legal limits or market ceilings; ordinary deviations remain comparisons.
+EXTREME_PRICE_OVER_VALUE_PCT = 20.0
+EXTREME_LTV_PCT = 125.0
+EXTREME_APR_ABOVE_BENCHMARK_PP = 5.0
+
 
 def _num(value: Any) -> float:
     try:
@@ -90,22 +96,32 @@ def evaluate(data: dict[str, Any]) -> dict[str, Any]:
     credit_score = _num(data.get("creditScore"))
     credit_tier = str(data.get("creditTier") or "—")
 
-    # Review flags are reserved for actual record inconsistencies. Market
-    # comparisons such as price vs. value, LTV, and APR vs. a tier average are
-    # displayed below but do not generate a warning by themselves.
     review_items: list[dict[str, str]] = []
+
+    def add_review(text: str) -> None:
+        review_items.append({"label": "Review:", "text": text})
 
     price_difference = None
     price_difference_pct = None
     if supported_value > 0 and cash_price > 0:
         price_difference = cash_price - supported_value
         price_difference_pct = price_difference / supported_value * 100
+        if price_difference_pct > EXTREME_PRICE_OVER_VALUE_PCT:
+            add_review(
+                f"cash price is {_percent(price_difference_pct)} above the entered supported vehicle value "
+                f"({_money(price_difference)} higher)."
+            )
 
     ltv = None
     amount_above_value = None
     if supported_value > 0 and amount_financed > 0:
         ltv = amount_financed / supported_value * 100
         amount_above_value = amount_financed - supported_value
+        if ltv > EXTREME_LTV_PCT:
+            add_review(
+                f"amount financed equals {_percent(ltv)} of the entered supported vehicle value "
+                f"and exceeds that value by {_money(amount_above_value)}."
+            )
 
     down_payment_pct = None
     if cash_down_entered and cash_price > 0:
@@ -132,6 +148,11 @@ def evaluate(data: dict[str, Any]) -> dict[str, Any]:
     if vehicle_status == "Used" and apr > 0 and tier_info:
         benchmark_apr = float(tier_info["used_apr"])
         apr_difference = apr - benchmark_apr
+        if apr_difference > EXTREME_APR_ABOVE_BENCHMARK_PP:
+            add_review(
+                f"APR is {apr_difference:.2f} percentage points above the Q1 2026 Experian "
+                f"used-auto average for the selected VantageScore 4.0 tier."
+            )
 
     if credit_score > 0 and tier_info:
         low = int(tier_info["low"])
@@ -152,7 +173,10 @@ def evaluate(data: dict[str, Any]) -> dict[str, Any]:
     elif apr <= 0:
         rate_note = "No APR benchmark comparison is shown because APR was not entered. Interest rate is not substituted for APR."
     else:
-        rate_note = "Q1 2026 Experian used-vehicle tier average. Reference point only, not a ceiling or automatic flag."
+        rate_note = (
+            "Q1 2026 Experian used-vehicle tier average. Reference point only, not a ceiling. "
+            "Only an unusually large deviation triggers a screening flag."
+        )
 
     price_vs_value = "—"
     if price_difference is not None and price_difference_pct is not None:
