@@ -69,10 +69,10 @@ function missingRequiredFields(data) {
   if (!data.make) missing.push("Make");
   if (!data.model) missing.push("Model");
   if (!(data.cashPrice > 0)) missing.push("Dealer cash price");
+  if (!(data.apr > 0)) missing.push("APR");
   if (!(data.amountFinanced > 0)) missing.push("Amount financed");
   if (!(data.monthlyPayment > 0)) missing.push("Monthly payment");
   if (!(data.termMonths > 0)) missing.push("Loan term / number of payments");
-  if (!(data.apr > 0) && !(data.statedRate > 0)) missing.push("APR or interest rate");
   if (!data.creditTier) missing.push("Experian Q1 2026 VantageScore 4.0 credit tier or unavailable");
   return missing;
 }
