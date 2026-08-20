@@ -43,8 +43,8 @@
       </div>
 
       <div class="subsection compact-subsection financed-extras">
-        <h3>Financed extras (only if included in the proposed financing)</h3>
-        <p class="helper">Enter only amounts actually financed as part of the transaction.</p>
+        <h3>Financed extras</h3>
+        <p class="helper">Complete this section only if taxes, fees, GAP, a warranty/service contract, or other add-ons are included in the amount financed.</p>
         <div class="grid grid-2">
           <label>Financed taxes and fees<div class="money-input"><span>$</span><input id="taxesFees" type="number" min="0" step="50" placeholder="0"></div></label>
           <label>Financed GAP<div class="money-input"><span>$</span><input id="gap" type="number" min="0" step="50" placeholder="0"></div></label>
@@ -60,14 +60,14 @@
         <label>APR * (Regulation Z annual percentage rate)<div class="percent-input"><input id="apr" type="number" min="0" max="100" step="0.001" placeholder="0"><span>%</span></div></label>
         <label>Amount financed * (Regulation Z amount financed)<div class="money-input"><span>$</span><input id="amountFinanced" type="number" min="0" step="100" placeholder="0"></div></label>
         <label>Monthly payment *<div class="money-input"><span>$</span><input id="monthlyPayment" type="number" min="0" step="10" placeholder="0"></div></label>
-        <label>Interest rate (if separately stated by lender or dealer)<div class="percent-input"><input id="statedRate" type="number" min="0" max="100" step="0.001" placeholder="If stated"><span>%</span></div></label>
+        <label>Interest rate<div class="percent-input"><input id="statedRate" type="number" min="0" max="100" step="0.001" placeholder="If stated"><span>%</span></div></label>
         <label>Loan term / number of payments *<div class="suffix-input"><input id="termMonths" type="number" min="1" max="120" step="1" placeholder="60"><span>months</span></div></label>
         <label>Cash down payment<div class="money-input"><span>$</span><input id="cashDown" type="number" min="0" step="100" placeholder="0 if none"></div></label>
-        <label>Total of payments (if disclosed in Regulation Z)<div class="money-input"><span>$</span><input id="totalPayments" type="number" min="0" step="100" placeholder="If disclosed"></div></label>
-        <label>Finance charge (if disclosed; total dollar cost of credit)<div class="money-input"><span>$</span><input id="financeCharge" type="number" min="0" step="100" placeholder="If disclosed"></div></label>
+        <label>Total of payments (Regulation Z sum of scheduled payments)<div class="money-input"><span>$</span><input id="totalPayments" type="number" min="0" step="100" placeholder="If available"></div></label>
+        <label>Finance charge (Regulation Z dollar cost of credit)<div class="money-input"><span>$</span><input id="financeCharge" type="number" min="0" step="100" placeholder="If available"></div></label>
         <label>Lender / creditor<input id="lender" type="text" placeholder="If known"></label>
       </div>
-      <p class="helper">Use APR for the market comparison. The stated interest rate is kept separate because it is not interchangeable with APR.</p>
+      <p class="helper">APR and interest rate are different. The interest rate is the stated borrowing rate; APR reflects that rate together with certain finance charges. Use APR for the market comparison.</p>
 
       <div class="field-group financing-channel">
         <span class="field-label">How financing was obtained</span>
